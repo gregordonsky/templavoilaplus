@@ -40,7 +40,10 @@ class YamlLoadSaveHandler extends AbstractFileLoadSaveHandler implements LoadSav
 
     public function save(SplFileInfo $file, array $data): void
     {
-        throw new \Exception('Not Yet Implemented');
+        $yamlContent = \Symfony\Component\Yaml\Yaml::dump($data, 100, 4, \Symfony\Component\Yaml\Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
+        GeneralUtility::writeFile($file->getPathname(), $yamlContent);
+
+        //throw new \Exception('Not Yet Implemented');
     }
 
     public function delete(SplFileInfo $file): void

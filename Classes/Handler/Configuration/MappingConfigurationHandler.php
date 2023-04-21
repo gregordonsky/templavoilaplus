@@ -69,8 +69,23 @@ class MappingConfigurationHandler extends AbstractConfigurationHandler
         return $mappingConfiguration;
     }
 
+     /** @TODO childTemplate and ChildSelector are not taken into considerantion and are not saved!!! */
     public function saveConfiguration(AbstractConfiguration $configuration): void
     {
-        throw new \Exception('Not Yet Implemented');
+        if ($configuration instanceof MappingConfiguration) {
+            $yamlContent['tvp-mapping']['meta']['name'] = $configuration->getName();
+            $yamlContent['tvp-mapping']['combinedDataStructureIdentifier'] = $configuration->getCombinedDataStructureIdentifier() ?? NULL;
+            $yamlContent['tvp-mapping']['combinedTemplateConfigurationIdentifier'] = $configuration->getCombinedTemplateConfigurationIdentifier() ?? NULL;
+            $yamlContent['tvp-mapping']['combinedBackendLayoutConfigurationIdentifier'] = $configuration->getCombinedBackendLayoutConfigurationIdentifier() ?? NULL;
+            $yamlContent['tvp-mapping']['mappingToTemplate'] = $configuration->getMappingToTemplate();
+            
+            $yamlContent['tvp-mapping'] = array_filter($yamlContent['tvp-mapping']);
+            
+            $this->loadSaveHandler->save($configuration->getFile(), $yamlContent);
+        } else {
+            throw new \Exception('Configuration of wrong type');
+        }
+        
+        //throw new \Exception('Not Yet Implemented');
     }
 }
