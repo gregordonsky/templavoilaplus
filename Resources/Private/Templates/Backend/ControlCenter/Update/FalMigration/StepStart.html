@@ -1,0 +1,60 @@
+{namespace core=TYPO3\CMS\Core\ViewHelpers}
+
+<div class="callout">
+    <h2 class="text-primary">Update templavoila to use FAL</h2>
+    <f:be.infobox title="Warning" state="1">Please backup your theme files before running any of the update scripts!</f:be.infobox>
+    <f:be.infobox title="Warning" state="1">The <strong>first</strong> local storage inside "fileadmin" will be used for the migration. If you have multiple storages, only enable the one which should be used for the migration.</f:be.infobox>
+
+    <p class="lead">This script will updates:</p></p>
+    <ol class="list-group">
+        <li class="list-group-item">All templavoila uploaded files related to tt_content to FAL</li>
+        <li class="list-group-item">All DataStructures which are related to TCA property values internal_type="file" for columns config type="group".</li>
+        <li class="list-group-item">All MappingConfiguration which contains a typoScript valueProcessing of '10 = IMAGE' and '10.file.import'</li>
+    </ol>
+    <p class="lead">They may not backward compatible afterwards.</p>
+    
+    <p class="lead">There are some remarks to take into considerations:</p>
+    <ol class="list-group">
+        <li class="list-group-item list-group-item-danger">If there are config type="group" columns within a section, the script will update the related DataStructure and MappingConfiguration.<br />You must manually edit these configurations, as config type="inline" columns are not allowed in a section.</li>
+        <li class="list-group-item list-group-item-danger">Templavoila uploaded files related to pages will NOT be migrated.</li>
+        <li class="list-group-item">This wizard will copy ALL files from each uploadFolder to the target folder "fileadmin/{targetFolder}"; so you need to manually check if there are files with same names in each uploadFolder to prevent data loss.</li>
+        <li class="list-group-item">It is highly recommended to run this script in a test environment first, and then check if everything is correct</li>
+    </ol>
+    
+    <f:if condition="!{notMigratedTTContentCount}">
+        <f:then>
+            <p class="lead">
+                <span class="text-success mark">There are no content elements which are using the old relation. No migration for tt_content is needed</span>
+            </p>
+        </f:then>
+        <f:else>
+            <f:be.infobox title="Warning" state="1">There are <strong>{notMigratedTTContentCount}</strong> content elements which are using the old relation.</f:be.infobox>
+        </f:else>
+    </f:if>
+	
+    <f:if condition="!{notMigratedMappingConfigurationCount}">
+        <f:then>
+            <p class="lead">
+                <span class="text-success mark">There are no MappingConfiguration elements which contains a typoScript valueProcessing of '10 = IMAGE' and '10.file.import'. No migration for MappingConfiguration is needed</span>
+            </p>
+        </f:then>
+        <f:else>
+            <f:be.infobox title="Warning" state="1">There are <strong>{notMigratedMappingConfigurationCount}</strong> MappingConfiguration elements which are using the old typoscript.</f:be.infobox>
+        </f:else>
+    </f:if>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <f:link.action controller="Backend\ControlCenter\Update" action="info" class="btn btn-default btn-block btn-lg">
+                <core:icon identifier="actions-view-go-back" /> Back to TV+ Update Script collection
+            </f:link.action>
+        </div>
+        <div class="col-sm-4">
+        </div>
+        <div class="col-sm-4">
+            <f:link.action action="stepFinal" class="btn btn-warning  btn-block btn-lg {f:if(condition: '!{notMigratedTTContentCount} && !{notMigratedMappingConfigurationCount}', then: 'disabled')}">
+                <core:icon identifier="{f:if(condition: '{notMigratedTTContentCount} || {notMigratedMappingConfigurationCount}', then: 'actions-play', else: 'actions-ban')}" /> Run Update templavoila to use FAL <small><small>(Version: 0.0.1)</small></small>
+            </f:link.action>
+        </div>
+    </div>
+</div>

@@ -45,6 +45,7 @@ if (version_compare($typo3Version->getVersion(), '12.0.0', '<=')) {
             \Tvp\TemplaVoilaPlus\Controller\Backend\ControlCenter\Update\DataStructureV8Controller::class => 'stepStart,stepFinal',
             \Tvp\TemplaVoilaPlus\Controller\Backend\ControlCenter\Update\DataStructureV10Controller::class => 'stepStart,stepFinal',
             \Tvp\TemplaVoilaPlus\Controller\Backend\ControlCenter\Update\DataStructureV11Controller::class => 'stepStart,stepFinal',
+            \Tvp\TemplaVoilaPlus\Controller\Backend\ControlCenter\Update\FalMigrationController::class => 'stepStart,stepFinal',
         ],
         [
             'access' => 'user,group',
